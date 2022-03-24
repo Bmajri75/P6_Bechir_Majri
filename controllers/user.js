@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt'); // bcrypt pour hashage des mots de passe
 // je recupere les model cree 
 const userModel = require('../models/Users');
 
+// FONCTION POUT L'inscription
 exports.inscription = (req, res, next) => {
   delete req.body._id;// on supprime le champs Id qui sera cree automatiquement avent de cree mon instance
 
@@ -19,12 +20,39 @@ exports.inscription = (req, res, next) => {
         .then(() => res.status(201).json({
           message: 'Profil Crèe !'
         })) // la response si tout vas bien
-        .catch(err => res.status(400).json({ err } // la reponse si tout vas mal
-          .send(console.log(` il y'a une erreur ${error}`))));// avec un msg dans la console
+        .catch(err => res.status(400).json({ err }));//la reponse si tout vas mal
     })
     .catch((err) => {
       res.status(500).json({ err }) // capture err 500 en cas d'erreur serveur
-        .send(console.log(` erreur : ${err}`))
     })
 
 };
+
+
+// FONCTION POUR CONEXION
+exports.login = (req, res, next) => {
+  userModel.findOne({ email: req.body.email })
+    .then((utilisateur) => {
+      if (!utilisateur) {
+        return res.status(401).json({ error: 'utilisateur introuvable' })
+      }
+
+
+
+      bcrypt.compare(req.body.password, utilisateur.password)
+        .then((reponseCheik) => {
+          console.log(reponseCheik)
+          if (!reponseCheik === true) {
+            return res.status(401).json({ error: 'Le password est incorect' })
+          } else {
+            return res.status(200).json({ message: ' vous pouvez entrer' })
+          }
+        })
+        .catch((err) => {
+          res.status(500).json({ err })
+        })
+    })
+    .catch((err) => { res.status(500).json({ err }) })
+
+
+}

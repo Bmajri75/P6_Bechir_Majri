@@ -7,9 +7,9 @@ const router = express.Router();
 const controlerUser = require('../controllers/user');
 
 
-
 // ===== Mes Routes User=====
 router.post('/signup', controlerUser.inscription);
+router.post('/login', controlerUser.login);
 
 
 module.exports = router;
