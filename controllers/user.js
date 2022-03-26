@@ -1,12 +1,12 @@
 // c'est Ici que vas etre executer toutes les commandes pour ma routes 
 const bcrypt = require('bcrypt'); // bcrypt pour hashage des mots de passe
+const jswtoken = require('jsonwebtoken');
 
 // je recupere les model cree 
 const userModel = require('../models/Users');
 
 // FONCTION POUT L'inscription
 exports.inscription = (req, res, next) => {
-  delete req.body._id;// on supprime le champs Id qui sera cree automatiquement avent de cree mon instance
 
   // hachage du Mdp 
   bcrypt.hash(req.body.password, 10)// hashage 10
@@ -16,43 +16,47 @@ exports.inscription = (req, res, next) => {
         email: req.body.email,// l'operateur vas recuperer tout ce qui peut etre envoyer dans les champs dans le body et detail seul les titre email etc..
         password: hash
       });
-      user.save() // methode qui envoie a la dataBase l'instance de userModel
-        .then(() => res.status(201).json({
-          message: 'Profil Crèe !'
-        })) // la response si tout vas bien
+
+      user
+        .save() // methode qui envoie a la dataBase l'instance de userModel
+        .then(() => res.status(201).json({ message: 'Profil Crèe !' })) // la response si tout vas bien
         .catch(err => res.status(400).json({ err }));//la reponse si tout vas mal
     })
     .catch((err) => {
-      res.status(500).json({ err }) // capture err 500 en cas d'erreur serveur
-    })
-
+      res.status(500).json({ err });
+    })// capture err 500 en cas d'erreur serveur
 };
 
 
 // FONCTION POUR CONEXION
 exports.login = (req, res, next) => {
-  userModel.findOne({ email: req.body.email })
-    .then((utilisateur) => {
-      if (!utilisateur) {
+  userModel.findOne({ email: req.body.email })// je recherche le mail entrer dans la Bd
+    .then((utilisateur) => {// celui ci sera dans une reponse "utilisateur"
+      if (!utilisateur) { // si selui ci est fals  retourn 
         return res.status(401).json({ error: 'utilisateur introuvable' })
       }
-
-
-
+      // verification du password
       bcrypt.compare(req.body.password, utilisateur.password)
-        .then((reponseCheik) => {
-          console.log(reponseCheik)
-          if (!reponseCheik === true) {
+
+        .then((reponseVerif) => {
+          console.log(reponseVerif)
+
+          if (!reponseVerif) {
             return res.status(401).json({ error: 'Le password est incorect' })
-          } else {
-            return res.status(200).json({ message: ' vous pouvez entrer' })
           }
+
+          res.status(200).json({
+            // mise en place du token pour le suivie de qui peut faire, le userId et le token seron liee
+            userId: utilisateur._id,
+            token: jswtoken.sign(
+              { userId: utilisateur._id },
+              "TOKEN_JSON_RANDOME",
+              { expiresIn: "30" }
+            )
+          })
+
         })
-        .catch((err) => {
-          res.status(500).json({ err })
-        })
+        .catch((error) => { res.status(500).json({ error }) })
     })
     .catch((err) => { res.status(500).json({ err }) })
-
-
 }
