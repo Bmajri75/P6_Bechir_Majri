@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 
 // le shema pour envoie en Bd, il sera rempli par le front
-const thinkShema = mongoose.Schema({
+const sauceShema = mongoose.Schema({
   userId: { type: String, required: true },
   name: { type: String, required: true },
   manufacture: { type: String, required: true },
@@ -18,4 +18,4 @@ const thinkShema = mongoose.Schema({
 })
 
 
-module.exports = mongoose.model('Think', thinkShema);
+module.exports = mongoose.model('sauces', sauceShema);
