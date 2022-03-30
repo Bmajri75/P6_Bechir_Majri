@@ -3,20 +3,19 @@ const saucesModel = require('../models/sauces');
 
 
 // Cree Sauce
-exports.crateSauce = (req, res, next) => {
+exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce)
-  delete sauceObject._id; // je supprime le id cree au prealable
-  const sauce = new saucessaucesModel({
+  const sauce = new saucesModel({
     ...sauceObject,
-    imageUrl: `${req.protocol}://${req.get('host')}/vue/images/${req.file.filename}`
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
-  saucesModel.save()
+  sauce.save()
     .then(() => res.status(201).json({ messag: 'Sauce Cree' }))
-    .catch(err => res.status(400), json({ err }));
+    .catch(err => res.status(400).json({ err }));
 }
 
-
-exports.allSauces = (req, res) => {
+// aficher toutes les sauces
+exports.allSauces = (req, res, next) => {
   saucesModel.find()
     .then(sauces => res.status(200).json(sauces))
     .catch(err => res.status(400).json({ err }))

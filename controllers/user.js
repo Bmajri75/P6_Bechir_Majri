@@ -50,7 +50,7 @@ exports.login = (req, res, next) => {
             userId: utilisateur._id,
             token: jswtoken.sign(
               { userId: utilisateur._id },
-              "TOKEN_JSON_RANDOME",
+              process.env.TOKEN_CODE,
               { expiresIn: "30" }
             )
           })
