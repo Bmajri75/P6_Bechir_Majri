@@ -2,7 +2,6 @@
 // j'appel le router de Express
 const express = require('express');
 const router = express.Router();
-
 // requier de mes controler pour les placer en arguments de mes routes
 const controllerUser = require('../controllers/user');
 

@@ -49,9 +49,9 @@ exports.login = (req, res, next) => {
             // mise en place du token pour le suivie de qui peut faire, le userId et le token seron liee
             userId: utilisateur._id,
             token: jswtoken.sign(
-              { userId: utilisateur._id },
+              { userId: utilisateur._id }, // userID prend le ID de l'user
               process.env.TOKEN_CODE,
-              { expiresIn: "30" }
+              { expiresIn: "24h" }
             )
           })
 
