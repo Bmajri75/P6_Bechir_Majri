@@ -2,7 +2,7 @@
 const express = require('express');// je requier express pour la creation de l'app
 const morgan = require('morgan');// morgan pour pour un retours des codes status
 const mongoose = require('./database/mongoose');//le module mongoose pour la conexion à la base de donnée;
-const path = require('path');
+const path = require('path');// Path 
 const app = express();// je place dans app le module express
 
 
@@ -23,13 +23,17 @@ const routesUser = require('./routes/user');
 const routesSauces = require('./routes/sauces')
 
 
+// la route des images 
+/**
+ * __dirname == le dossier sur le quel on se trouve
+ */
+app.use('/images', express.static(path.join(__dirname, '/images')));
+
 // routes authantifications
 app.use('/api/auth', routesUser);
 
 //routes avec sauces 
 app.use('/api/sauces', routesSauces);
 
-
-app.use('/images', express.static(path.join(__dirname, '/images')));
 // J'export app qui sera appeler sur server.js
 module.exports = app;
