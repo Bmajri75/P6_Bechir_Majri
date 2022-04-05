@@ -14,8 +14,7 @@ router.get('/', auth, controllerSauces.allSauces);
 router.get('/:id', auth, controllerSauces.singleSauce);
 router.put('/:id', auth, multer, controllerSauces.modifySauce);
 router.delete('/:id', auth, controllerSauces.deletSauce);
-
-// router.post('/:id/like', controllerSauces.);
+router.post('/:id/like', auth, controllerSauces.likeSauces);
 
 
 
