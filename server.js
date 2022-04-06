@@ -1,9 +1,12 @@
-const app = require('./app');// je recupere la configuration de mon module app.js
+/**
+ *   ===> fichier point entrer de mon app
+ *     ==> Server.js permet de lancer le server
+ */
+
+const app = require('./app');//  !je require la configuration de mon module app.js
+
 
 // ===== lancement du server ======
-app.listen(process.env.PORT, () => {
-  console.log(`Server ouvert sur le PORT : ${process.env.PORT}`);// le serveur sera lu sur le port PORT de la variable d'environement
-})
-
-
-// voir la video sur le CORS de egeniclimatique n 141
+app.listen(process.env.PORT, () => { // listen ==> methode de lancement (app.listen(path, [callback])) equivalent a http.Server.listen()
+  console.log(`Server ouvert sur le PORT : ${process.env.PORT}`);
+});

@@ -1,21 +1,25 @@
-// c'est Ici que vas etre executer toutes les commandes pour ma routes 
+/**
+ *  !===> ici le controler de mes utilisateurs
+ */
+
 const bcrypt = require('bcrypt'); // bcrypt pour hashage des mots de passe
-const jswtoken = require('jsonwebtoken');
+const jswtoken = require('jsonwebtoken'); // pour la creation de token 
 
 // je recupere les model cree 
 const userModel = require('../models/Users');
 
-// FONCTION POUT L'inscription
+// la logique de L'inscription
 exports.inscription = (req, res, next) => {
-
   // hachage du Mdp 
-  bcrypt.hash(req.body.password, 10)// hashage 10
+  bcrypt.hash(req.body.password, 10)// hashage 10 du mots de passe entrer dans le body
     .then((hash) => {
       // je cree une instance du model cree c'est a dir Users qui est dans la constante userModel
       const user = new userModel({
-        email: req.body.email,// l'operateur vas recuperer tout ce qui peut etre envoyer dans les champs dans le body et detail seul les titre email etc..
+        email: req.body.email,// l'operateur vas recuperer tout ce qui peut etre envoyer dans les champs dans le body
         password: hash
       });
+
+      // je recupere le mail et le pass hashé je l'envoie a ma Base de donnée
 
       user
         .save() // methode qui envoie a la dataBase l'instance de userModel
